@@ -16,20 +16,49 @@ mod tests {
     fn test_input() {
         let button = Input::MouseButton(0);
 
-        {
+        let rl_duration = {
             let mut rl = RefList::<Input>::new();
             rl.push(button.clone());
             let instant = Instant::now();
             let contains = rl.contains(&button);
             let _ = format_args!("{:?}", rl);
-            println!("Found {:?} in RefList[{}]={} in {}secs.", button, rl.len(), contains, instant.elapsed().as_secs_f32())
-        }
-        {
+            let duration = instant.elapsed().as_secs_f32();
+            println!("Found {:?} in RefList[{}]={} in {}secs.", button, rl.len(), contains, duration);
+            duration
+        };
+        let list_duration = {
             let l = Input::range();
             let instant = Instant::now();
             let contains = l.contains(&button);
             let _ = format_args!("{:?}", l);
-            println!("Found {:?} in Vec[{}]={} in {}secs.", button, l.len(), contains, instant.elapsed().as_secs_f32())
-        }
+            let duration = instant.elapsed().as_secs_f32();
+            println!("Found {:?} in Vec[{}]={} in {}secs.", button, l.len(), contains, duration);
+            duration
+        };
+        assert!(rl_duration <= list_duration, "RefList Duration {} <= List Duration {} = {}", rl_duration, list_duration, rl_duration <= list_duration);
+    }
+
+    #[test]
+    fn test_input_2() {
+        let button = Input::MouseButton(0);
+
+        let rl_duration = {
+            let mut rl = RefList::<Input>::new();
+            rl.push(button.clone());
+            let instant = Instant::now();
+            let contains = rl.contains(&button);
+            let duration = instant.elapsed().as_secs_f32();
+            println!("Found {:?} in RefList[{}]={} in {}secs.", button, rl.len(), contains, duration);
+            duration
+        };
+        let list_duration = {
+            let l = Input::range();
+            let instant = Instant::now();
+            let contains = l.contains(&button);
+            let duration = instant.elapsed().as_secs_f32();
+            println!("Found {:?} in Vec[{}]={} in {}secs.", button, l.len(), contains, duration);
+            duration
+        };
+        assert!(rl_duration <= list_duration, "RefList Duration {} <= List Duration {} = {}", rl_duration, list_duration, rl_duration <= list_duration);
     }
 }
